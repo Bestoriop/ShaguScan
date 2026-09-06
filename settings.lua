@@ -329,6 +329,7 @@ settings.OpenConfig = function(caption)
       info.value = entry.file
       info.func = function()
         UIDropDownMenu_SetSelectedValue(dialog.soundfile, this.value)
+        PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\"..this.value, "Master")
       end
       UIDropDownMenu_AddButton(info)
     end
