@@ -4,6 +4,18 @@ local utils = ShaguScan.utils
 
 local settings = {}
 
+settings.soundlist = {
+  { text = "Gruntling Horn", file = "gruntling_horn_bb.ogg" },
+  { text = "Air Horn", file = "AirHorn.ogg" },
+  { text = "Bleat", file = "Bleat.ogg" },
+  { text = "Boxing Arena Sound", file = "BoxingArenaSound.ogg" },
+  { text = "Brass", file = "Brass.mp3" },
+  { text = "Cow Mooing", file = "CowMooing.ogg" },
+  { text = "Heartbeat", file = "HeartbeatSingle.ogg" },
+  { text = "Run Away", file = "RunAway.ogg" },
+  { text = "Warning Siren", file = "WarningSiren.ogg" },
+}
+
 SLASH_SHAGUSCAN1, SLASH_SHAGUSCAN2, SLASH_SHAGUSCAN3 = "/scan", "/sscan", "/shaguscan"
 
 SlashCmdList["SHAGUSCAN"] = function(input)
