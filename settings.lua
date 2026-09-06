@@ -96,7 +96,7 @@ settings.OpenConfig = function(caption)
     ShaguScan_db.config[caption] = {
       filter = "npc,infight,alive",
       scale = 1, anchor = "CENTER", x = 0, y = 0, width = 75, height = 12, spacing = 4, maxrow = 20,
-      sound = true, soundcd = 60
+      sound = true, soundcd = 60, soundfile = "gruntling_horn_bb.ogg"
     }
   end
 
