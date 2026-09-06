@@ -320,7 +320,7 @@ settings.OpenConfig = function(caption)
     GameTooltip:Hide()
   end)
   dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
-  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 6)
+  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 2)
   UIDropDownMenu_SetWidth(90, dialog.soundfile)
   UIDropDownMenu_Initialize(dialog.soundfile, function()
     for _, entry in ipairs(settings.soundlist) do
