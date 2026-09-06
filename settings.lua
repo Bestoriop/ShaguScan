@@ -79,10 +79,12 @@ settings.OpenConfig = function(caption)
   end
 
   -- Create defconfig if new config
+  -- Create defconfig if new config
   if not ShaguScan_db.config[caption] then
     ShaguScan_db.config[caption] = {
       filter = "npc,infight,alive",
-      scale = 1, anchor = "CENTER", x = 0, y = 0, width = 75, height = 12, spacing = 4, maxrow = 20
+      scale = 1, anchor = "CENTER", x = 0, y = 0, width = 75, height = 12, spacing = 4, maxrow = 20,
+      sound = true
     }
   end
 
@@ -97,7 +99,7 @@ settings.OpenConfig = function(caption)
   dialog:SetFrameStrata("DIALOG")
   dialog:SetPoint("CENTER", 0, 0)
   dialog:SetWidth(264)
-  dialog:SetHeight(264)
+  dialog:SetHeight(282)
 
   dialog:EnableMouse(true)
   dialog:RegisterForDrag("LeftButton")
@@ -122,8 +124,8 @@ settings.OpenConfig = function(caption)
   dialog.save:SetText("Save")
   dialog.save:SetScript("OnClick", function()
     local new_caption = dialog.caption:GetText()
-
     local filter = dialog.filter:GetText()
+    local sound = dialog.sound:GetChecked()
     local width = dialog.width:GetText()
     local height = dialog.height:GetText()
     local spacing = dialog.spacing:GetText()
@@ -144,6 +146,7 @@ settings.OpenConfig = function(caption)
       scale = tonumber(scale) or config.scale,
       x = tonumber(x) or config.x,
       y = tonumber(y) or config.y,
+      sound = sound and true or false,
     }
 
     ShaguScan_db.config[caption] = nil
@@ -306,11 +309,29 @@ settings.OpenConfig = function(caption)
   dialog.maxrow:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-
   backdrop.pos = backdrop.pos + 18
-
+  -- Sound
+  local caption = backdrop:CreateLabel("Sound:")
+  caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
+  dialog.sound = CreateFrame("CheckButton", nil, backdrop, "UICheckButtonTemplate")
+  dialog.sound:SetWidth(18)
+  dialog.sound:SetHeight(18)
+  dialog.sound:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos + 3)
+  dialog.sound:SetChecked(config.sound == nil or config.sound)
+  dialog.sound.ShowTooltip = settings.ShowTooltip
+  dialog.sound:SetScript("OnEnter", function()
+    dialog.sound:ShowTooltip({
+      "Play Sound on New Unit",
+      "|cffaaaaaaPlays a sound whenever a new unit appears in this window."
+    })
+  end)
+  dialog.sound:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  backdrop.pos = backdrop.pos + 18
   -- Spacer
   backdrop.pos = backdrop.pos + 9
+  -- Anchor
 
   -- Anchor
   local caption = backdrop:CreateLabel("Anchor:")
