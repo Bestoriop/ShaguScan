@@ -228,7 +228,7 @@ settings.OpenConfig = function(caption)
   label:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
   dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
   dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 40, -backdrop.pos - 14)
-  UIDropDownMenu_SetWidth(dialog.soundfile, 130)
+  UIDropDownMenu_SetWidth(130, dialog.soundfile)
   UIDropDownMenu_Initialize(dialog.soundfile, function()
     for _, entry in ipairs(settings.soundlist) do
       local info = UIDropDownMenu_CreateInfo()
@@ -414,3 +414,4 @@ settings.OpenConfig = function(caption)
 end
 
 ShaguScan.settings = settings
+
