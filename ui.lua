@@ -321,7 +321,7 @@ ui:SetScript("OnUpdate", function()
 	    local cd = config.soundcd or 60
 	    if not root.soundcd[guid] or now - root.soundcd[guid] > cd then
 	      root.soundcd[guid] = now
-	      PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\gruntling_horn_bb.ogg", "Master")
+	      PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\"..(config.soundfile or "gruntling_horn_bb.ogg"), "Master")
 	    end
 	  end
 	end
