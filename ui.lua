@@ -312,7 +312,16 @@ ui:SetScript("OnUpdate", function()
         y = (count-1) * (config.height + config.spacing) + title_size
         height = math.max(y + config.height + config.spacing, height)
 
-        root.frames[guid] = root.frames[guid] or root:CreateBar(guid)
+        if not root.frames[guid] then
+	  root.frames[guid] = root:CreateBar(guid)
+
+	  root.soundcd = root.soundcd or {}
+	  local now = GetTime()
+	  if not root.soundcd[guid] or now - root.soundcd[guid] > 10 then
+	    root.soundcd[guid] = now
+	    PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\gruntling_horn_bb.ogg", "Master")
+	  end
+	end
 
         -- update position if required
         if not root.frames[guid].pos or root.frames[guid].pos ~= x..-y then
