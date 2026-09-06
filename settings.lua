@@ -106,7 +106,7 @@ settings.OpenConfig = function(caption)
   dialog:SetFrameStrata("DIALOG")
   dialog:SetPoint("CENTER", 0, 0)
   dialog:SetWidth(264)
-  dialog:SetHeight(330)
+  dialog:SetHeight(282)
   dialog:EnableMouse(true)
   dialog:RegisterForDrag("LeftButton")
   dialog:SetMovable(true)
@@ -223,25 +223,6 @@ settings.OpenConfig = function(caption)
     GameTooltip:Hide()
   end)
   backdrop.pos = backdrop.pos + 18
-  -- Sound File
-  local label = backdrop:CreateLabel("Sound File:")
-  label:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-  dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
-  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 40, -backdrop.pos - 14)
-  UIDropDownMenu_SetWidth(130, dialog.soundfile)
-  UIDropDownMenu_Initialize(dialog.soundfile, function()
-    for _, entry in ipairs(settings.soundlist) do
-      local info = UIDropDownMenu_CreateInfo()
-      info.text = entry.text
-      info.value = entry.file
-      info.func = function()
-        UIDropDownMenu_SetSelectedValue(dialog.soundfile, this.value)
-      end
-      UIDropDownMenu_AddButton(info)
-    end
-  end)
-  UIDropDownMenu_SetSelectedValue(dialog.soundfile, config.soundfile or "gruntling_horn_bb.ogg")
-  backdrop.pos = backdrop.pos + 46
   -- Spacer
   backdrop.pos = backdrop.pos + 9
   -- Width
@@ -328,7 +309,7 @@ settings.OpenConfig = function(caption)
   end)
   dialog.soundcd = backdrop:CreateTextBox(tostring(config.soundcd or 60))
   dialog.soundcd:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 84, -backdrop.pos)
-  dialog.soundcd:SetWidth(40)
+  dialog.soundcd:SetWidth(30)
   dialog.soundcd:SetScript("OnEnter", function()
     dialog.soundcd:ShowTooltip({
       "Sound Cooldown (seconds)",
@@ -338,6 +319,31 @@ settings.OpenConfig = function(caption)
   dialog.soundcd:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
+  dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
+  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 6)
+  UIDropDownMenu_SetWidth(90, dialog.soundfile)
+  UIDropDownMenu_Initialize(dialog.soundfile, function()
+    for _, entry in ipairs(settings.soundlist) do
+      local info = UIDropDownMenu_CreateInfo()
+      info.text = entry.text
+      info.value = entry.file
+      info.func = function()
+        UIDropDownMenu_SetSelectedValue(dialog.soundfile, this.value)
+      end
+      UIDropDownMenu_AddButton(info)
+    end
+  end)
+  dialog.soundfile.ShowTooltip = settings.ShowTooltip
+  dialog.soundfile:SetScript("OnEnter", function()
+    dialog.soundfile:ShowTooltip({
+      "Sound File",
+      "|cffaaaaaaThe sound played when a new unit appears."
+    })
+  end)
+  dialog.soundfile:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  UIDropDownMenu_SetSelectedValue(dialog.soundfile, config.soundfile or "gruntling_horn_bb.ogg")
   backdrop.pos = backdrop.pos + 18
   -- Spacer
   backdrop.pos = backdrop.pos + 9
