@@ -318,7 +318,8 @@ ui:SetScript("OnUpdate", function()
 	  if config.sound == nil or config.sound then
 	    root.soundcd = root.soundcd or {}
 	    local now = GetTime()
-	    if not root.soundcd[guid] or now - root.soundcd[guid] > 60 then
+	    local cd = config.soundcd or 60
+	    if not root.soundcd[guid] or now - root.soundcd[guid] > cd then
 	      root.soundcd[guid] = now
 	      PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\gruntling_horn_bb.ogg", "Master")
 	    end
