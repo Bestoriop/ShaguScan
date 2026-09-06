@@ -111,7 +111,7 @@ settings.OpenConfig = function(caption)
   dialog:SetFrameStrata("DIALOG")
   dialog:SetPoint("CENTER", 0, 0)
   dialog:SetWidth(264)
-  dialog:SetHeight(282)
+  dialog:SetHeight(300)
 
   dialog:EnableMouse(true)
   dialog:RegisterForDrag("LeftButton")
