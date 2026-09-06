@@ -84,7 +84,7 @@ settings.OpenConfig = function(caption)
     ShaguScan_db.config[caption] = {
       filter = "npc,infight,alive",
       scale = 1, anchor = "CENTER", x = 0, y = 0, width = 75, height = 12, spacing = 4, maxrow = 20,
-      sound = true
+      sound = true, soundcd = 60
     }
   end
 
@@ -125,7 +125,8 @@ settings.OpenConfig = function(caption)
   dialog.save:SetScript("OnClick", function()
     local new_caption = dialog.caption:GetText()
     local filter = dialog.filter:GetText()
-    local sound = dialog.sound:GetChecked()
+    local sound = dialog.sound:GetChecked() and true or false
+    local soundcd = dialog.soundcd:GetText()
     local width = dialog.width:GetText()
     local height = dialog.height:GetText()
     local spacing = dialog.spacing:GetText()
@@ -147,6 +148,7 @@ settings.OpenConfig = function(caption)
       x = tonumber(x) or config.x,
       y = tonumber(y) or config.y,
       sound = sound and true or false,
+      soundcd = tonumber(soundcd) or config.soundcd or 60,
     }
 
     ShaguScan_db.config[caption] = nil
@@ -326,6 +328,18 @@ settings.OpenConfig = function(caption)
     })
   end)
   dialog.sound:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  dialog.soundcd = backdrop:CreateTextBox(tostring(config.soundcd or 60))
+  dialog.soundcd:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 84, -backdrop.pos)
+  dialog.soundcd:SetWidth(40)
+  dialog.soundcd:SetScript("OnEnter", function()
+    dialog.soundcd:ShowTooltip({
+      "Sound Cooldown (seconds)",
+      "|cffaaaaaaMinimum delay before the same unit can trigger the sound again."
+    })
+  end)
+  dialog.soundcd:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
   backdrop.pos = backdrop.pos + 18
