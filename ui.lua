@@ -315,11 +315,13 @@ ui:SetScript("OnUpdate", function()
         if not root.frames[guid] then
 	  root.frames[guid] = root:CreateBar(guid)
 
-	  root.soundcd = root.soundcd or {}
-	  local now = GetTime()
-	  if not root.soundcd[guid] or now - root.soundcd[guid] > 10 then
-	    root.soundcd[guid] = now
-	    PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\gruntling_horn_bb.ogg", "Master")
+	  if config.sound == nil or config.sound then
+	    root.soundcd = root.soundcd or {}
+	    local now = GetTime()
+	    if not root.soundcd[guid] or now - root.soundcd[guid] > 10 then
+	      root.soundcd[guid] = now
+	      PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\gruntling_horn_bb.ogg", "Master")
+	    end
 	  end
 	end
 
