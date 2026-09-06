@@ -89,8 +89,6 @@ settings.OpenConfig = function(caption)
     if existing:IsShown() then existing:Hide() else existing:Show() end
     return
   end
-
-  -- Create defconfig if new config
   -- Create defconfig if new config
   if not ShaguScan_db.config[caption] then
     ShaguScan_db.config[caption] = {
@@ -99,34 +97,27 @@ settings.OpenConfig = function(caption)
       sound = true, soundcd = 60, soundfile = "gruntling_horn_bb.ogg"
     }
   end
-
   -- Main Dialog
   local dialog = CreateFrame("Frame", "ShaguScanConfigDialog"..caption, UIParent)
   table.insert(UISpecialFrames, "ShaguScanConfigDialog"..caption)
-
   -- Save Shortcuts
   local config = ShaguScan_db.config[caption]
   local caption = caption
-
   dialog:SetFrameStrata("DIALOG")
   dialog:SetPoint("CENTER", 0, 0)
   dialog:SetWidth(264)
-  dialog:SetHeight(300)
-
+  dialog:SetHeight(330)
   dialog:EnableMouse(true)
   dialog:RegisterForDrag("LeftButton")
   dialog:SetMovable(true)
   dialog:SetScript("OnDragStart", function() this:StartMoving() end)
   dialog:SetScript("OnDragStop", function() this:StopMovingOrSizing() end)
-
   dialog:SetBackdrop(settings.backdrop)
   dialog:SetBackdropColor(.2, .2, .2, 1)
   dialog:SetBackdropBorderColor(.2, .2, .2, 1)
-
   -- Assign functions to dialog
   dialog.CreateTextBox = settings.CreateTextBox
   dialog.CreateLabel = settings.CreateLabel
-
   -- Save & Reload
   dialog.save = CreateFrame("Button", nil, dialog, "GameMenuButtonTemplate")
   dialog.save:SetWidth(96)
@@ -148,7 +139,6 @@ settings.OpenConfig = function(caption)
     local scale = dialog.scale:GetText()
     local x = dialog.x:GetText()
     local y = dialog.y:GetText()
-
     -- build new config
     local new_config = {
       filter = filter,
@@ -164,12 +154,10 @@ settings.OpenConfig = function(caption)
       soundcd = tonumber(soundcd) or config.soundcd or 60,
       soundfile = soundfile,
     }
-
     ShaguScan_db.config[caption] = nil
     ShaguScan_db.config[new_caption] = new_config
     this:GetParent():Hide()
   end)
-
   -- Delete
   dialog.delete = CreateFrame("Button", nil, dialog, "GameMenuButtonTemplate")
   dialog.delete:SetWidth(96)
@@ -181,7 +169,6 @@ settings.OpenConfig = function(caption)
     ShaguScan_db.config[caption] = nil
     this:GetParent():Hide()
   end)
-
   dialog.close = CreateFrame("Button", nil, dialog, "UIPanelCloseButton")
   dialog.close:SetWidth(20)
   dialog.close:SetHeight(20)
@@ -189,7 +176,6 @@ settings.OpenConfig = function(caption)
   dialog.close:SetScript("OnClick", function()
     this:GetParent():Hide()
   end)
-
   -- Caption (Title)
   dialog.caption = dialog:CreateTextBox(caption)
   dialog.caption:SetPoint("TOPLEFT", dialog, "TOPLEFT", 8, -18)
@@ -197,25 +183,19 @@ settings.OpenConfig = function(caption)
   dialog.caption:SetFont(STANDARD_TEXT_FONT, 10)
   dialog.caption:SetJustifyH("CENTER")
   dialog.caption:SetHeight(20)
-
   -- Backdrop
   local backdrop = CreateFrame("Frame", nil, dialog)
   backdrop:SetBackdrop(settings.backdrop)
   backdrop:SetBackdropBorderColor(.2,.2,.2,1)
   backdrop:SetBackdropColor(.2,.2,.2,1)
-
   backdrop:SetPoint("TOPLEFT", dialog, "TOPLEFT", 8, -40)
   backdrop:SetPoint("BOTTOMRIGHT", dialog, "BOTTOMRIGHT", -8, 28)
-
   backdrop.CreateTextBox = settings.CreateTextBox
   backdrop.CreateLabel = settings.CreateLabel
-
   backdrop.pos = 8
-
   -- Filter
   local caption = backdrop:CreateLabel("Filter:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.filter = backdrop:CreateTextBox(config.filter)
   dialog.filter:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.filter:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -239,18 +219,16 @@ settings.OpenConfig = function(caption)
       "|cffffffffA complete list of filters can be found in the README."
     })
   end)
-
   dialog.filter:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-
   backdrop.pos = backdrop.pos + 18
   -- Sound File
   local label = backdrop:CreateLabel("Sound File:")
   label:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-  dialog.soundfile = CreateFrame("Frame", nil, backdrop, "UIDropDownMenuTemplate")
-  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 30, -backdrop.pos - 14)
-  UIDropDownMenu_SetWidth(dialog.soundfile, 140)
+  dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
+  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 40, -backdrop.pos - 14)
+  UIDropDownMenu_SetWidth(dialog.soundfile, 130)
   UIDropDownMenu_Initialize(dialog.soundfile, function()
     for _, entry in ipairs(settings.soundlist) do
       local info = UIDropDownMenu_CreateInfo()
@@ -263,14 +241,12 @@ settings.OpenConfig = function(caption)
     end
   end)
   UIDropDownMenu_SetSelectedValue(dialog.soundfile, config.soundfile or "gruntling_horn_bb.ogg")
-  backdrop.pos = backdrop.pos + 36
+  backdrop.pos = backdrop.pos + 46
   -- Spacer
   backdrop.pos = backdrop.pos + 9
-
   -- Width
   local caption = backdrop:CreateLabel("Width:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.width = backdrop:CreateTextBox(config.width)
   dialog.width:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.width:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -280,16 +256,13 @@ settings.OpenConfig = function(caption)
       "|cffaaaaaaAn Integer Value in Pixels"
     })
   end)
-
   dialog.width:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
   backdrop.pos = backdrop.pos + 18
-
   -- Height
   local caption = backdrop:CreateLabel("Height:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.height = backdrop:CreateTextBox(config.height)
   dialog.height:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.height:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -299,17 +272,13 @@ settings.OpenConfig = function(caption)
       "|cffaaaaaaAn Integer Value in Pixels"
     })
   end)
-
   dialog.height:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-
   backdrop.pos = backdrop.pos + 18
-
   -- Spacing
   local caption = backdrop:CreateLabel("Spacing:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.spacing = backdrop:CreateTextBox(config.spacing)
   dialog.spacing:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.spacing:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -319,17 +288,13 @@ settings.OpenConfig = function(caption)
       "|cffaaaaaaAn Integer Value in Pixels"
     })
   end)
-
   dialog.spacing:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-
   backdrop.pos = backdrop.pos + 18
-
   -- Max per Row
   local caption = backdrop:CreateLabel("Max-Row:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.maxrow = backdrop:CreateTextBox(config.maxrow)
   dialog.maxrow:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.maxrow:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -339,7 +304,6 @@ settings.OpenConfig = function(caption)
       "|cffaaaaaaA new column will be created once exceeded"
     })
   end)
-
   dialog.maxrow:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
@@ -378,11 +342,8 @@ settings.OpenConfig = function(caption)
   -- Spacer
   backdrop.pos = backdrop.pos + 9
   -- Anchor
-
-  -- Anchor
   local caption = backdrop:CreateLabel("Anchor:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.anchor = backdrop:CreateTextBox(config.anchor)
   dialog.anchor:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.anchor:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -398,17 +359,13 @@ settings.OpenConfig = function(caption)
       {"BOTTOMRIGHT", ""}
     })
   end)
-
   dialog.anchor:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-
   backdrop.pos = backdrop.pos + 18
-
   -- Scale
   local caption = backdrop:CreateLabel("Scale:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.scale = backdrop:CreateTextBox(utils.round(config.scale, 2))
   dialog.scale:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.scale:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -418,17 +375,13 @@ settings.OpenConfig = function(caption)
       "|cffaaaaaaA floating point number, 1 equals 100%"
     })
   end)
-
   dialog.scale:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-
   backdrop.pos = backdrop.pos + 18
-
   -- Position-X
   local caption = backdrop:CreateLabel("X-Position:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.x = backdrop:CreateTextBox(utils.round(config.x, 2))
   dialog.x:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.x:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -438,17 +391,13 @@ settings.OpenConfig = function(caption)
       "|cffaaaaaaA Number in Pixels"
     })
   end)
-
   dialog.x:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-
   backdrop.pos = backdrop.pos + 18
-
   -- Position-Y
   local caption = backdrop:CreateLabel("Y-Position:")
   caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-
   dialog.y = backdrop:CreateTextBox(utils.round(config.y, 2))
   dialog.y:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 60, -backdrop.pos)
   dialog.y:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -8, -backdrop.pos)
@@ -458,7 +407,6 @@ settings.OpenConfig = function(caption)
       "|cffaaaaaaA Number in Pixels"
     })
   end)
-
   dialog.y:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
