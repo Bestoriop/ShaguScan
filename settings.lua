@@ -139,6 +139,7 @@ settings.OpenConfig = function(caption)
     local filter = dialog.filter:GetText()
     local sound = dialog.sound:GetChecked() and true or false
     local soundcd = dialog.soundcd:GetText()
+    local soundfile = UIDropDownMenu_GetSelectedValue(dialog.soundfile) or config.soundfile or "gruntling_horn_bb.ogg"
     local width = dialog.width:GetText()
     local height = dialog.height:GetText()
     local spacing = dialog.spacing:GetText()
@@ -161,6 +162,7 @@ settings.OpenConfig = function(caption)
       y = tonumber(y) or config.y,
       sound = sound and true or false,
       soundcd = tonumber(soundcd) or config.soundcd or 60,
+      soundfile = soundfile,
     }
 
     ShaguScan_db.config[caption] = nil
@@ -243,7 +245,25 @@ settings.OpenConfig = function(caption)
   end)
 
   backdrop.pos = backdrop.pos + 18
-
+  -- Sound File
+  local label = backdrop:CreateLabel("Sound File:")
+  label:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
+  dialog.soundfile = CreateFrame("Frame", nil, backdrop, "UIDropDownMenuTemplate")
+  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 30, -backdrop.pos - 14)
+  UIDropDownMenu_SetWidth(dialog.soundfile, 140)
+  UIDropDownMenu_Initialize(dialog.soundfile, function()
+    for _, entry in ipairs(settings.soundlist) do
+      local info = UIDropDownMenu_CreateInfo()
+      info.text = entry.text
+      info.value = entry.file
+      info.func = function()
+        UIDropDownMenu_SetSelectedValue(dialog.soundfile, this.value)
+      end
+      UIDropDownMenu_AddButton(info)
+    end
+  end)
+  UIDropDownMenu_SetSelectedValue(dialog.soundfile, config.soundfile or "gruntling_horn_bb.ogg")
+  backdrop.pos = backdrop.pos + 36
   -- Spacer
   backdrop.pos = backdrop.pos + 9
 
