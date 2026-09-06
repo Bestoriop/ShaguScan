@@ -316,7 +316,7 @@ settings.OpenConfig = function(caption)
   dialog.sound = CreateFrame("CheckButton", nil, backdrop, "UICheckButtonTemplate")
   dialog.sound:SetWidth(18)
   dialog.sound:SetHeight(18)
-  dialog.sound:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos + 3)
+  dialog.sound:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos - 7)
   dialog.sound:SetChecked(config.sound == nil or config.sound)
   dialog.sound.ShowTooltip = settings.ShowTooltip
   dialog.sound:SetScript("OnEnter", function()
