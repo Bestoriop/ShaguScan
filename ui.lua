@@ -246,7 +246,6 @@ end
 ui:SetAllPoints()
 ui:SetScript("OnUpdate", function()
   if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .5 end
-
   -- remove old leftover frames
   for caption, root in pairs(ui.frames) do
     if not ShaguScan_db.config[caption] then
@@ -254,16 +253,13 @@ ui:SetScript("OnUpdate", function()
       ui.frames[caption] = nil
     end
   end
-
   -- create ui frames based on config values
   for caption, config in pairs(ShaguScan_db.config) do
     -- create root frame if not existing
     ui.frames[caption] = ui.frames[caption] or ui:CreateRoot(caption)
     local root = ui.frames[caption]
-
     -- skip if locked (due to moving)
     if root.lock then return end
-
     -- update position based on config
     if not root.pos or root.pos ~= config.anchor..config.x..config.y..config.scale then
       root.pos = config.anchor..config.x..config.y..config.scale
@@ -271,22 +267,18 @@ ui:SetScript("OnUpdate", function()
       root:SetPoint(config.anchor, config.x, config.y)
       root:SetScale(config.scale)
     end
-
     -- update filter if required
     if not root.filter_conf or root.filter_conf ~= config.filter then
       root.filter = {}
-
       -- prepare all filter texts
       local filter_texts = { utils.strsplit(',', config.filter) }
       for id, filter_text in pairs(filter_texts) do
         local name, args = utils.strsplit(':', filter_text)
         root.filter[name] = args or true
       end
-
       -- mark current state of data
       root.filter_conf = config.filter
     end
-
     -- run through all guids and fill with bars
     local title_size = 12 + config.spacing
     local width, height = config.width, config.height + title_size
@@ -299,22 +291,17 @@ ui:SetScript("OnUpdate", function()
           visible = visible and filter[name](guid, args)
         end
       end
-
       -- display element if filters allow it
       if UnitExists(guid) and visible then
         count = count + 1
-
         if count > config.maxrow then
           count, x = 1, x + config.width + config.spacing
           width = math.max(x + config.width, width)
         end
-
         y = (count-1) * (config.height + config.spacing) + title_size
         height = math.max(y + config.height + config.spacing, height)
-
         if not root.frames[guid] then
 	  root.frames[guid] = root:CreateBar(guid)
-
 	  if config.sound == nil or config.sound then
 	    root.soundcd = root.soundcd or {}
 	    local now = GetTime()
@@ -324,33 +311,38 @@ ui:SetScript("OnUpdate", function()
 	      PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\"..(config.soundfile or "gruntling_horn_bb.ogg"), "Master")
 	    end
 	  end
+	  if config.chatmsg then
+	    root.chatcd = root.chatcd or {}
+	    local now = GetTime()
+	    local cd = config.chatmsgcd or 60
+	    if not root.chatcd[guid] or now - root.chatcd[guid] > cd then
+	      root.chatcd[guid] = now
+	      local unitname = UnitName(guid) or "Unknown"
+	      SendChatMessage("Scan "..caption.." found "..unitname, config.chatmsgchannel or "SAY")
+	    end
+	  end
 	end
-
         -- update position if required
         if not root.frames[guid].pos or root.frames[guid].pos ~= x..-y then
           root.frames[guid]:ClearAllPoints()
           root.frames[guid]:SetPoint("TOPLEFT", root, "TOPLEFT", x, -y)
           root.frames[guid].pos = x..-y
         end
-
         -- update sizes if required
         if not root.frames[guid].sizes or root.frames[guid].sizes ~= config.width..config.height then
           root.frames[guid]:SetWidth(config.width)
           root.frames[guid]:SetHeight(config.height)
           root.frames[guid].sizes = config.width..config.height
         end
-
         root.frames[guid]:Show()
       elseif root.frames[guid] then
         root.frames[guid]:Hide()
         root.frames[guid] = nil
       end
     end
-
     -- update window size
     root:SetWidth(width)
     root:SetHeight(height)
   end
 end)
-
 ShaguScan.ui = ui
