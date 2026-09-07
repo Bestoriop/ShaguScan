@@ -225,11 +225,11 @@ settings.OpenConfig = function(caption)
   backdrop.pos = backdrop.pos + 18
   -- Sound
   local caption = backdrop:CreateLabel("Sound:")
-  caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
+  caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos - 2)
   dialog.sound = CreateFrame("CheckButton", nil, backdrop, "UICheckButtonTemplate")
   dialog.sound:SetWidth(18)
   dialog.sound:SetHeight(18)
-  dialog.sound:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos - 2)
+  dialog.sound:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos - 4)
   dialog.sound:SetChecked(config.sound == nil or config.sound)
   dialog.sound.ShowTooltip = settings.ShowTooltip
   dialog.sound:SetScript("OnEnter", function()
@@ -242,7 +242,7 @@ settings.OpenConfig = function(caption)
     GameTooltip:Hide()
   end)
   dialog.soundcd = backdrop:CreateTextBox(tostring(config.soundcd or 60))
-  dialog.soundcd:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 84, -backdrop.pos)
+  dialog.soundcd:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 84, -backdrop.pos - 2)
   dialog.soundcd:SetWidth(30)
   dialog.soundcd:SetScript("OnEnter", function()
     dialog.soundcd:ShowTooltip({
