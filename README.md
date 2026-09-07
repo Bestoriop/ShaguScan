@@ -32,7 +32,7 @@ As a filter you could for example choose: `player,pvp,alliance,alive` to only sh
 
 You can build the lists as you want them, there are now limits as long as the filter for it exists.
 
-![config](./screenshots/config.jpg)
+<img width="600" height="640" alt="image" src="https://github.com/user-attachments/assets/8a999dc7-a4d5-4921-b202-6febcec3e592" />
 
 # Filters
 
