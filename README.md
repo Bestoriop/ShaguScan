@@ -1,4 +1,4 @@
-# ShaguScan
+# ShaguScan (with sound alert)
 
 <img src="./screenshots/raidtargets.jpg" float="right" align="right">
 
@@ -6,6 +6,8 @@ An addon that scans for nearby units and filters them by custom attributes.
 It's made for World of Warcraft: Vanilla (1.12.1) and is only tested on [Turtle WoW](https://turtle-wow.org/).
 
 The addon can be used to see all marked raid targets, detect rare mobs, find nearby players that decided to do pvp, and much more!
+
+I just did some updates to trigger a chosen sound every time a unit appears in a shaguscan frame.
 
 > [!IMPORTANT]
 >
