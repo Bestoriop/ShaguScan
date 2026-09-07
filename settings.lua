@@ -16,6 +16,14 @@ settings.soundlist = {
   { text = "Warning Siren", file = "WarningSiren.ogg" },
 }
 
+
+settings.channellist = {
+  { text = "Say", value = "SAY" },
+  { text = "Party", value = "PARTY" },
+  { text = "Raid", value = "RAID" },
+  { text = "Battleground", value = "BATTLEGROUND" },
+}
+
 SLASH_SHAGUSCAN1, SLASH_SHAGUSCAN2, SLASH_SHAGUSCAN3 = "/scan", "/sscan", "/shaguscan"
 
 SlashCmdList["SHAGUSCAN"] = function(input)
@@ -94,7 +102,8 @@ settings.OpenConfig = function(caption)
     ShaguScan_db.config[caption] = {
       filter = "npc,infight,alive",
       scale = 1, anchor = "CENTER", x = 0, y = 0, width = 75, height = 12, spacing = 4, maxrow = 20,
-      sound = true, soundcd = 60, soundfile = "gruntling_horn_bb.ogg"
+      sound = true, soundcd = 60, soundfile = "gruntling_horn_bb.ogg",
+      chatmsg = false, chatmsgcd = 60, chatmsgchannel = "SAY"
     }
   end
   -- Main Dialog
@@ -106,7 +115,7 @@ settings.OpenConfig = function(caption)
   dialog:SetFrameStrata("DIALOG")
   dialog:SetPoint("CENTER", 0, 0)
   dialog:SetWidth(264)
-  dialog:SetHeight(282)
+  dialog:SetHeight(300)
   dialog:EnableMouse(true)
   dialog:RegisterForDrag("LeftButton")
   dialog:SetMovable(true)
@@ -131,6 +140,9 @@ settings.OpenConfig = function(caption)
     local sound = dialog.sound:GetChecked() and true or false
     local soundcd = dialog.soundcd:GetText()
     local soundfile = UIDropDownMenu_GetSelectedValue(dialog.soundfile) or config.soundfile or "gruntling_horn_bb.ogg"
+    local chatmsg = dialog.chatmsg:GetChecked() and true or false
+    local chatmsgcd = dialog.chatmsgcd:GetText()
+    local chatmsgchannel = UIDropDownMenu_GetSelectedValue(dialog.chatmsgchannel) or config.chatmsgchannel or "SAY"
     local width = dialog.width:GetText()
     local height = dialog.height:GetText()
     local spacing = dialog.spacing:GetText()
@@ -153,6 +165,9 @@ settings.OpenConfig = function(caption)
       sound = sound and true or false,
       soundcd = tonumber(soundcd) or config.soundcd or 60,
       soundfile = soundfile,
+      chatmsg = chatmsg and true or false,
+      chatmsgcd = tonumber(chatmsgcd) or config.chatmsgcd or 60,
+      chatmsgchannel = chatmsgchannel,
     }
     ShaguScan_db.config[caption] = nil
     ShaguScan_db.config[new_caption] = new_config
@@ -254,7 +269,7 @@ settings.OpenConfig = function(caption)
     GameTooltip:Hide()
   end)
   dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
-  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 0)
+  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 2)
   UIDropDownMenu_SetWidth(90, dialog.soundfile)
   UIDropDownMenu_Initialize(dialog.soundfile, function()
     for _, entry in ipairs(settings.soundlist) do
@@ -279,6 +294,62 @@ settings.OpenConfig = function(caption)
     GameTooltip:Hide()
   end)
   UIDropDownMenu_SetSelectedValue(dialog.soundfile, config.soundfile or "gruntling_horn_bb.ogg")
+  backdrop.pos = backdrop.pos + 18
+  -- Chat Message
+  local caption = backdrop:CreateLabel("Chat msg:")
+  caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos - 4)
+  dialog.chatmsg = CreateFrame("CheckButton", nil, backdrop, "UICheckButtonTemplate")
+  dialog.chatmsg:SetWidth(18)
+  dialog.chatmsg:SetHeight(18)
+  dialog.chatmsg:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos - 6)
+  dialog.chatmsg:SetChecked(config.chatmsg == true)
+  dialog.chatmsg.ShowTooltip = settings.ShowTooltip
+  dialog.chatmsg:SetScript("OnEnter", function()
+    dialog.chatmsg:ShowTooltip({
+      "Send Chat Message on New Unit",
+      "|cffaaaaaaSends a message in the selected chat channel whenever a new unit appears in this window."
+    })
+  end)
+  dialog.chatmsg:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  dialog.chatmsgcd = backdrop:CreateTextBox(tostring(config.chatmsgcd or 60))
+  dialog.chatmsgcd:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 84, -backdrop.pos - 4)
+  dialog.chatmsgcd:SetWidth(30)
+  dialog.chatmsgcd:SetScript("OnEnter", function()
+    dialog.chatmsgcd:ShowTooltip({
+      "Chat Message Cooldown (seconds)",
+      "|cffaaaaaaMinimum delay before the same unit can trigger the chat message again."
+    })
+  end)
+  dialog.chatmsgcd:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  dialog.chatmsgchannel = CreateFrame("Frame", dialog:GetName().."ChatMsgChannelDropDown", backdrop, "UIDropDownMenuTemplate")
+  dialog.chatmsgchannel:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 2)
+  UIDropDownMenu_SetWidth(100, dialog.chatmsgchannel)
+  UIDropDownMenu_Initialize(dialog.chatmsgchannel, function()
+    for _, entry in ipairs(settings.channellist) do
+      local info = UIDropDownMenu_CreateInfo()
+      info.text = entry.text
+      info.value = entry.value
+      info.func = function()
+        UIDropDownMenu_SetSelectedValue(dialog.chatmsgchannel, this.value)
+      end
+      UIDropDownMenu_AddButton(info)
+    end
+  end)
+  dialog.chatmsgchannel.ShowTooltip = settings.ShowTooltip
+  dialog.chatmsgchannel:SetScript("OnEnter", function()
+    dialog.chatmsgchannel:ShowTooltip({
+      "Chat Channel",
+      "|cffaaaaaaThe chat channel used to send the detection message."
+    })
+  end)
+  dialog.chatmsgchannel:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  UIDropDownMenu_SetSelectedValue(dialog.chatmsgchannel, config.chatmsgchannel or "SAY")
   backdrop.pos = backdrop.pos + 18
   -- Spacer
   backdrop.pos = backdrop.pos + 9
@@ -421,4 +492,3 @@ settings.OpenConfig = function(caption)
 end
 
 ShaguScan.settings = settings
-
