@@ -223,6 +223,63 @@ settings.OpenConfig = function(caption)
     GameTooltip:Hide()
   end)
   backdrop.pos = backdrop.pos + 18
+  -- Sound
+  local caption = backdrop:CreateLabel("Sound:")
+  caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
+  dialog.sound = CreateFrame("CheckButton", nil, backdrop, "UICheckButtonTemplate")
+  dialog.sound:SetWidth(18)
+  dialog.sound:SetHeight(18)
+  dialog.sound:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos - 2)
+  dialog.sound:SetChecked(config.sound == nil or config.sound)
+  dialog.sound.ShowTooltip = settings.ShowTooltip
+  dialog.sound:SetScript("OnEnter", function()
+    dialog.sound:ShowTooltip({
+      "Play Sound on New Unit",
+      "|cffaaaaaaPlays a sound whenever a new unit appears in this window."
+    })
+  end)
+  dialog.sound:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  dialog.soundcd = backdrop:CreateTextBox(tostring(config.soundcd or 60))
+  dialog.soundcd:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 84, -backdrop.pos)
+  dialog.soundcd:SetWidth(30)
+  dialog.soundcd:SetScript("OnEnter", function()
+    dialog.soundcd:ShowTooltip({
+      "Sound Cooldown (seconds)",
+      "|cffaaaaaaMinimum delay before the same unit can trigger the sound again."
+    })
+  end)
+  dialog.soundcd:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
+  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 2)
+  UIDropDownMenu_SetWidth(90, dialog.soundfile)
+  UIDropDownMenu_Initialize(dialog.soundfile, function()
+    for _, entry in ipairs(settings.soundlist) do
+      local info = UIDropDownMenu_CreateInfo()
+      info.text = entry.text
+      info.value = entry.file
+      info.func = function()
+        UIDropDownMenu_SetSelectedValue(dialog.soundfile, this.value)
+        PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\"..this.value, "Master")
+      end
+      UIDropDownMenu_AddButton(info)
+    end
+  end)
+  dialog.soundfile.ShowTooltip = settings.ShowTooltip
+  dialog.soundfile:SetScript("OnEnter", function()
+    dialog.soundfile:ShowTooltip({
+      "Sound File",
+      "|cffaaaaaaThe sound played when a new unit appears."
+    })
+  end)
+  dialog.soundfile:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  UIDropDownMenu_SetSelectedValue(dialog.soundfile, config.soundfile or "gruntling_horn_bb.ogg")
+  backdrop.pos = backdrop.pos + 18
   -- Spacer
   backdrop.pos = backdrop.pos + 9
   -- Width
@@ -288,63 +345,6 @@ settings.OpenConfig = function(caption)
   dialog.maxrow:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-  backdrop.pos = backdrop.pos + 18
-  -- Sound
-  local caption = backdrop:CreateLabel("Sound:")
-  caption:SetPoint("TOPLEFT", backdrop, 10, -backdrop.pos)
-  dialog.sound = CreateFrame("CheckButton", nil, backdrop, "UICheckButtonTemplate")
-  dialog.sound:SetWidth(18)
-  dialog.sound:SetHeight(18)
-  dialog.sound:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 56, -backdrop.pos - 2)
-  dialog.sound:SetChecked(config.sound == nil or config.sound)
-  dialog.sound.ShowTooltip = settings.ShowTooltip
-  dialog.sound:SetScript("OnEnter", function()
-    dialog.sound:ShowTooltip({
-      "Play Sound on New Unit",
-      "|cffaaaaaaPlays a sound whenever a new unit appears in this window."
-    })
-  end)
-  dialog.sound:SetScript("OnLeave", function()
-    GameTooltip:Hide()
-  end)
-  dialog.soundcd = backdrop:CreateTextBox(tostring(config.soundcd or 60))
-  dialog.soundcd:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 84, -backdrop.pos)
-  dialog.soundcd:SetWidth(30)
-  dialog.soundcd:SetScript("OnEnter", function()
-    dialog.soundcd:ShowTooltip({
-      "Sound Cooldown (seconds)",
-      "|cffaaaaaaMinimum delay before the same unit can trigger the sound again."
-    })
-  end)
-  dialog.soundcd:SetScript("OnLeave", function()
-    GameTooltip:Hide()
-  end)
-  dialog.soundfile = CreateFrame("Frame", dialog:GetName().."SoundFileDropDown", backdrop, "UIDropDownMenuTemplate")
-  dialog.soundfile:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 108, -backdrop.pos - 0)
-  UIDropDownMenu_SetWidth(90, dialog.soundfile)
-  UIDropDownMenu_Initialize(dialog.soundfile, function()
-    for _, entry in ipairs(settings.soundlist) do
-      local info = UIDropDownMenu_CreateInfo()
-      info.text = entry.text
-      info.value = entry.file
-      info.func = function()
-        UIDropDownMenu_SetSelectedValue(dialog.soundfile, this.value)
-        PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\"..this.value, "Master")
-      end
-      UIDropDownMenu_AddButton(info)
-    end
-  end)
-  dialog.soundfile.ShowTooltip = settings.ShowTooltip
-  dialog.soundfile:SetScript("OnEnter", function()
-    dialog.soundfile:ShowTooltip({
-      "Sound File",
-      "|cffaaaaaaThe sound played when a new unit appears."
-    })
-  end)
-  dialog.soundfile:SetScript("OnLeave", function()
-    GameTooltip:Hide()
-  end)
-  UIDropDownMenu_SetSelectedValue(dialog.soundfile, config.soundfile or "gruntling_horn_bb.ogg")
   backdrop.pos = backdrop.pos + 18
   -- Spacer
   backdrop.pos = backdrop.pos + 9
