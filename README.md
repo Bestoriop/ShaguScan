@@ -1,4 +1,4 @@
-# ShaguScan (with sound alert)
+# ShaguScan (with sound / chat alert)
 
 <img src="./screenshots/raidtargets.jpg" float="right" align="right">
 
@@ -7,7 +7,7 @@ It's made for World of Warcraft: Vanilla (1.12.1) and is only tested on [Turtle 
 
 The addon can be used to see all marked raid targets, detect rare mobs, find nearby players that decided to do pvp, and much more!
 
-I just did some updates to trigger a chosen sound every time a unit appears in a shaguscan frame.
+EDIT from september 2026 : I just did some updates to trigger a chosen sound / chat msg every time a unit appears in a shaguscan window.
 
 > [!IMPORTANT]
 >
@@ -32,8 +32,7 @@ As a filter you could for example choose: `player,pvp,alliance,alive` to only sh
 
 You can build the lists as you want them, there are no limits as long as the filter for it exists.
 
-<img width="317" height="338" alt="image" src="https://github.com/user-attachments/assets/90093672-d0de-454c-82a2-248171fb86f5" />
-
+<img width="320" height="362" alt="image" src="https://github.com/user-attachments/assets/442fd7a6-f7a8-4a5b-bb78-bfec0b1fafc9" />
 
 # Filters
 
