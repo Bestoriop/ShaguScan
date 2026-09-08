@@ -327,6 +327,7 @@ ui:SetScript("OnUpdate", function()
 	      end
 	    end
 	  end
+	end
         -- update position if required
         if not root.frames[guid].pos or root.frames[guid].pos ~= x..-y then
           root.frames[guid]:ClearAllPoints()
