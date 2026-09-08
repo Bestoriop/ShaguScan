@@ -18,6 +18,7 @@ settings.soundlist = {
 
 
 settings.channellist = {
+  { text = "Only Me", value = "SELF" },
   { text = "Say", value = "SAY" },
   { text = "Party", value = "PARTY" },
   { text = "Raid", value = "RAID" },
@@ -103,7 +104,7 @@ settings.OpenConfig = function(caption)
       filter = "npc,infight,alive",
       scale = 1, anchor = "CENTER", x = 0, y = 0, width = 75, height = 12, spacing = 4, maxrow = 20,
       sound = true, soundcd = 60, soundfile = "gruntling_horn_bb.ogg",
-      chatmsg = false, chatmsgcd = 60, chatmsgchannel = "SAY"
+      chatmsg = false, chatmsgcd = 60, chatmsgchannel = "SELF"
     }
   end
   -- Main Dialog
@@ -142,7 +143,7 @@ settings.OpenConfig = function(caption)
     local soundfile = UIDropDownMenu_GetSelectedValue(dialog.soundfile) or config.soundfile or "gruntling_horn_bb.ogg"
     local chatmsg = dialog.chatmsg:GetChecked() and true or false
     local chatmsgcd = dialog.chatmsgcd:GetText()
-    local chatmsgchannel = UIDropDownMenu_GetSelectedValue(dialog.chatmsgchannel) or config.chatmsgchannel or "SAY"
+    local chatmsgchannel = UIDropDownMenu_GetSelectedValue(dialog.chatmsgchannel) or config.chatmsgchannel or "SELF"
     local width = dialog.width:GetText()
     local height = dialog.height:GetText()
     local spacing = dialog.spacing:GetText()
@@ -349,7 +350,7 @@ settings.OpenConfig = function(caption)
   dialog.chatmsgchannel:SetScript("OnLeave", function()
     GameTooltip:Hide()
   end)
-  UIDropDownMenu_SetSelectedValue(dialog.chatmsgchannel, config.chatmsgchannel or "SAY")
+  UIDropDownMenu_SetSelectedValue(dialog.chatmsgchannel, config.chatmsgchannel or "SELF")
   backdrop.pos = backdrop.pos + 18
   -- Spacer
   backdrop.pos = backdrop.pos + 9
