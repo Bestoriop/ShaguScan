@@ -349,5 +349,6 @@ ui:SetScript("OnUpdate", function()
     root:SetWidth(width)
     root:SetHeight(height)
   end
-end)
+end
+		
 ShaguScan.ui = ui
