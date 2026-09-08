@@ -318,10 +318,15 @@ ui:SetScript("OnUpdate", function()
 	    if not root.chatcd[guid] or now - root.chatcd[guid] > cd then
 	      root.chatcd[guid] = now
 	      local unitname = UnitName(guid) or "Unknown"
-	      SendChatMessage("Scan "..caption.." found "..unitname, config.chatmsgchannel or "SAY")
+	      local msg = caption.." found : "..unitname
+	      local channel = config.chatmsgchannel or "SELF"
+	      if channel == "SELF" then
+	        DEFAULT_CHAT_FRAME:AddMessage(msg)
+	      else
+	        SendChatMessage(msg, channel)
+	      end
 	    end
 	  end
-	end
         -- update position if required
         if not root.frames[guid].pos or root.frames[guid].pos ~= x..-y then
           root.frames[guid]:ClearAllPoints()
