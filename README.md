@@ -3,11 +3,9 @@
 <img src="./screenshots/raidtargets.jpg" float="right" align="right">
 
 An addon that scans for nearby units and filters them by custom attributes.
-It's made for World of Warcraft: Vanilla (1.12.1) and is only tested on [Turtle WoW](https://turtle-wow.org/).
+It's made for World of Warcraft: Vanilla (1.12.1) and is only tested on [Octo WoW]([https://turtle-wow.org/](https://octowow.st/)).
 
 The addon can be used to see all marked raid targets, detect rare mobs, find nearby players that decided to do pvp, and much more!
-
-EDIT from september 2026 : I just did some updates to trigger a chosen sound / chat msg every time a unit appears in a shaguscan window.
 
 > [!IMPORTANT]
 >
@@ -31,6 +29,11 @@ In case `/scan` is already blocked by another addon, you can also use `/sscan` o
 As a filter you could for example choose: `player,pvp,alliance,alive` to only show players with pvp enabled on the alliance side that are alive.
 
 You can build the lists as you want them, there are no limits as long as the filter for it exists.
+
+# Sound / Chat alerts
+
+I added in this fork the option to trigger a chosen sound and/or a chat msg every time a unit appears in a shaguscan window. The chat msg can be sent to you only, or say/party/raid/bg. 
+You need to choose a delay in seconds between each trigger for a unit. Careful with this : If you don't put a CD like 60 seconds it will feel very spammy. 
 
 <img width="320" height="362" alt="image" src="https://github.com/user-attachments/assets/442fd7a6-f7a8-4a5b-bb78-bfec0b1fafc9" />
 
