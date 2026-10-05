@@ -1,5 +1,5 @@
 ## Interface: 11200
-## Title: |cffffcc00Shagu|cffffffffScan
+## Title: |cffffcc00Shagu|cffffffffScan with alerts
 ## Author: Shagu
 ## Notes: Uses SuperWoW GUIDs to show nearby units
 ## Version: 1.0
