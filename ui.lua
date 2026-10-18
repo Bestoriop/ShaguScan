@@ -301,33 +301,37 @@ ui:SetScript("OnUpdate", function()
         y = (count-1) * (config.height + config.spacing) + title_size
         height = math.max(y + config.height + config.spacing, height)
         if not root.frames[guid] then
-	  root.frames[guid] = root:CreateBar(guid)
-	  if config.sound == nil or config.sound then
-	    root.soundcd = root.soundcd or {}
-	    local now = GetTime()
-	    local cd = config.soundcd or 60
-	    if not root.soundcd[guid] or now - root.soundcd[guid] > cd then
-	      root.soundcd[guid] = now
-	      PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\"..(config.soundfile or "gruntling_horn_bb.ogg"), "Master")
-	    end
-	  end
-	  if config.chatmsg then
-	    root.chatcd = root.chatcd or {}
-	    local now = GetTime()
-	    local cd = config.chatmsgcd or 60
-	    if not root.chatcd[guid] or now - root.chatcd[guid] > cd then
-	      root.chatcd[guid] = now
-	      local unitname = UnitName(guid) or "Unknown"
-	      local msg = caption.." found : "..unitname
-	      local channel = config.chatmsgchannel or "SELF"
-	      if channel == "SELF" then
-	        DEFAULT_CHAT_FRAME:AddMessage(msg)
-	      else
-	        SendChatMessage(msg, channel)
-	      end
-	    end
-	  end
-	end
+          root.frames[guid] = root:CreateBar(guid)
+        end
+
+        -- alerte sonore : à l'apparition, puis répétée tant que l'unité reste visible
+        if config.sound == nil or config.sound then
+          root.soundcd = root.soundcd or {}
+          local now = GetTime()
+          local cd = config.soundcd or 60
+          if not root.soundcd[guid] or now - root.soundcd[guid] > cd then
+            root.soundcd[guid] = now
+            PlaySoundFile("Interface\\AddOns\\ShaguScan\\sound\\"..(config.soundfile or "gruntling_horn_bb.ogg"), "Master")
+          end
+        end
+
+        -- message chat : même logique, avec son propre délai et son propre canal
+        if config.chatmsg then
+          root.chatcd = root.chatcd or {}
+          local now = GetTime()
+          local cd = config.chatmsgcd or 60
+          if not root.chatcd[guid] or now - root.chatcd[guid] > cd then
+            root.chatcd[guid] = now
+            local unitname = UnitName(guid) or "Unknown"
+            local msg = caption.." found : "..unitname
+            local channel = config.chatmsgchannel or "SELF"
+            if channel == "SELF" then
+              DEFAULT_CHAT_FRAME:AddMessage(msg)
+            else
+              SendChatMessage(msg, channel)
+            end
+          end
+        end
         -- update position if required
         if not root.frames[guid].pos or root.frames[guid].pos ~= x..-y then
           root.frames[guid]:ClearAllPoints()
